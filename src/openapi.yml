@@ -1,0 +1,354 @@
+openapi: 3.0.3
+info:
+  title: API Atti e Interventi di Dissesto
+  version: 1.0.0
+  description: API per il recupero degli atti, degli interventi di difesa del suolo e lo stato dell'applicazione.
+  x-summary: API per la gestione di atti e interventi di dissesto idrogeologico
+  x-api-id: it.example.api-atti-interventi-dissesto
+  termsOfService: https://example.com/terms-of-service
+  contact:
+    name: Supporto API
+    email: supporto@example.com
+servers:
+  - url: https://api.example.com
+    description: Server di produzione per l'API Atti e Interventi di Dissesto
+tags:
+  - name: public
+    description: Endpoints pubblici
+security:
+  - bearerAuth: []
+paths:
+  /elenco-atti-dissesto:
+    get:
+      summary: Fornisce la lista degli atti con cui l'Ente erogatore ha finanziato interventi di difesa del suolo
+      operationId: elencoAttiDissesto
+      description: Recupera l'elenco degli atti di dissesto per un determinato ente erogatore.
+      tags:
+        - public
+      parameters:
+        - name: id_ente
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 6
+          description: Codice identificativo ente erogatore servizio (regioni = cod. ISTAT; Bolzano = 21; Trento = 22).
+        - name: id_atto_fin
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 40
+          description: Codice/Denominazione sintetica atto di finanziamento.
+        - name: data_agg
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Data ultimo aggiornamento informazioni dell'atto.
+      responses:
+        '200':
+          description: Elenco degli atti di dissesto recuperato con successo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  atti:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttoDissesto'
+        '400':
+          description: Richiesta non valida.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Non autorizzato. Token JWT mancante o non valido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Errore interno del server.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  
+  /elenco-interventi-dissesto:
+    get:
+      summary: Fornisce l'elenco degli interventi di difesa del suolo finanziati da un atto di finanziamento
+      operationId: elencoInterventiDissesto
+      description: Recupera l'elenco degli interventi di difesa del suolo per un determinato atto di finanziamento.
+      tags:
+        - public
+      parameters:
+        - name: id_ente
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 6
+          description: Codice identificativo ente erogatore servizio (regioni = cod. ISTAT; Bolzano = 21; Trento = 22).
+        - name: id_atto_fin
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 40
+          description: Codice/Denominazione sintetica atto di finanziamento.
+        - name: cup
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 15
+          description: Codice Unico di Progetto (CUP) associato al singolo intervento.
+        - name: clp
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 30
+          description: Codice Locale Progetto (CLP) utilizzato per identificare il progetto nell'applicazione WEB MOP (Monitoraggio Opere Pubbliche del MEF-RGS).
+        - name: data_agg
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Data ultimo aggiornamento informazioni dell'intervento.
+      responses:
+        '200':
+          description: Elenco degli interventi di difesa del suolo recuperato con successo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interventi:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InterventoDissesto'
+        '400':
+          description: Richiesta non valida.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Non autorizzato. Token JWT mancante o non valido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Errore interno del server.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  
+  /status:
+    get:
+      summary: Ritorna lo stato dell'applicazione.
+      operationId: status
+      tags:
+        - public
+      description: |
+        Ritorna lo stato dell'applicazione in formato problem+json.
+      responses:
+        '200':
+          description: Il servizio funziona correttamente.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        default:
+          description: Il server ha riscontrato un problema.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AttoDissesto:
+      type: object
+      required:
+        - id_ente
+        - id_atto_fin
+        - attoesteso
+        - data_fin
+        - data_agg
+      properties:
+        id_ente:
+          type: string
+          maxLength: 6
+          description: Codice identificativo ente erogatore servizio.
+          example: "123456"
+        id_atto_fin:
+          type: string
+          maxLength: 40
+          description: Codice/Denominazione sintetica atto di finanziamento.
+          example: "FIN123"
+        attoesteso:
+          type: string
+          maxLength: 250
+          description: Denominazione estesa dell'atto di finanziamento.
+          example: "Atto di finanziamento per la difesa del suolo"
+        data_fin:
+          type: string
+          format: date
+          description: Data di approvazione dell'atto di finanziamento.
+          example: "2023-05-20"
+        guri_bur:
+          type: string
+          maxLength: 250
+          description: Riferimenti della Gazzetta o Bollettino ufficiale della eventuale pubblicazione.
+          example: "GURI n. 123 del 2023"
+        link_atto:
+          type: string
+          maxLength: 250
+          description: Indirizzo web da cui è consultabile/scaricabile l'atto di finanziamento.
+          example: "http://example.com/atto-finanziamento"
+        data_agg:
+          type: string
+          format: date
+          description: Data ultimo aggiornamento informazioni dell'atto.
+          example: "2024-06-30"
+
+    InterventoDissesto:
+      type: object
+      required:
+        - id_ente
+        - id_atto_fin
+        - cup
+        - clp
+        - imp_fin
+        - cat_diss
+        - tipo_diss
+        - data_agg
+      properties:
+        id_ente:
+          type: string
+          maxLength: 6
+          description: Codice identificativo ente erogatore servizio.
+          example: "123456"
+        id_atto_fin:
+          type: string
+          maxLength: 40
+          description: Codice/Denominazione sintetica atto di finanziamento.
+          example: "FIN123"
+        cup:
+          type: string
+          maxLength: 15
+          description: CUP associato al singolo intervento.
+          example: "CUP123456789012"
+        clp:
+          type: string
+          maxLength: 30
+          description: Codice Locale Progetto (CLP).
+          example: "CLP123456789012345678901234567"
+        imp_fin:
+          type: number
+          format: double
+          description: Importo assegnato all'ente proponente dall'atto di finanziamento.
+          example: 1000000.00
+        cat_diss:
+          type: string
+          minLength: 1
+          maxLength: 1
+          description: Categoria dissesto (F = Frana, C = Dissesto costiero, A = Idraulico-alluvionale, I = Incendio, V = Valanga, M = Misto, N = Non definito)
+          example: "F"
+        tipo_diss:
+          type: string
+          maxLength: 6
+          description: Codice della tipologia prevalente del dissesto.
+          example: "DF-1"
+        id_altro:
+          type: string
+          maxLength: 200
+          description: Altro codice o descrizione utilizzati per identificare il singolo intervento nell'atto di finanziamento.
+          example: "Altro codice"
+        id_rendis:
+          type: string
+          maxLength: 15
+          description: Codice ReNDiS associato all'intervento.
+          example: "ReNDiS123456"
+        istat_prop:
+          type: string
+          maxLength: 20
+          description: Codice ISTAT dell'ente proponente.
+          example: "ISTAT123456"
+        istat_att:
+          type: string
+          maxLength: 20
+          description: Codice ISTAT dell'ente attuatore (solo se diverso da proponente).
+          example: "ISTAT654321"
+        tipo_opere:
+          type: string
+          maxLength: 6
+          description: Codice della tipologia prevalente di opere.
+          example: "SF-1"
+        id_passo:
+          type: string
+          maxLength: 6
+          description: Codice id_passo corrispondente allo stato di attuazione.
+          example: "190"
+        lat:
+          type: number
+          format: double
+          description: Latitudine (N) del punto baricentrico dell'intervento.
+          example: 45.46427
+        long:
+          type: number
+          format: double
+          description: Longitudine (E) del punto baricentrico dell'intervento.
+          example: 9.18951
+        titolo:
+          type: string
+          description: Titolo dell'intervento.
+          example: "Intervento di consolidamento del versante"
+        località:
+          type: string
+          description: Località dell'intervento.
+          example: "Località esempio"
+        provincia:
+          type: string
+          description: Provincia dell'intervento.
+          example: "Provincia esempio"
+        comune:
+          type: string
+          description: Comune dell'intervento.
+          example: "Comune esempio"
+        data_agg:
+          type: string
+          format: date
+          description: Data ultimo aggiornamento informazioni dell'intervento.
+          example: "2024-06-30"
+
+    Problem:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: Codice di stato HTTP.
+          example: 400
+        title:
+          type: string
+          description: Breve descrizione del problema.
+          example: "Richiesta non valida"
+        detail:
+          type: string
+          description: Descrizione dettagliata del problema.
+          example: "Il parametro 'id_ente' è obbligatorio e deve essere una stringa di massimo 6 caratteri."
