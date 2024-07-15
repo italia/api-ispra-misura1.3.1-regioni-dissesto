@@ -1,83 +1,23 @@
 openapi: 3.0.3
 info:
-  title: API Atti e Interventi di Dissesto
+  title: API Elenco Interventi di Dissesto
   version: 1.0.0
-  description: Questa specifica API definisce un template standardizzato per l'esposizione di dati relativi agli atti e agli interventi di difesa del suolo  finanziati da vari enti erogatori regionali. Questo template è destinato all'uso sulla Piattaforma Digitale Nazionale Dati (PDND), permettendo a ISPRA (Istituto Superiore per la Protezione e la Ricerca Ambientale) di recuperare i dati per alimentare il sistema ReNDiS (Repertorio  Nazionale degli interventi per la Difesa del Suolo).
-  x-summary: API per la gestione di atti e interventi di dissesto idrogeologico
-  x-api-id: it.example.api-atti-interventi-dissesto
+  description: Questa specifica API definisce un template standardizzato per l'esposizione di dati relativi agli interventi di difesa del suolo finanziati da vari enti erogatori regionali. Questo template è destinato all'uso sulla Piattaforma Digitale Nazionale Dati (PDND), permettendo a ISPRA (Istituto Superiore per la Protezione e la Ricerca Ambientale) di recuperare i dati per alimentare il sistema ReNDiS (Repertorio Nazionale degli interventi per la Difesa del Suolo).
+  x-summary: API per la gestione degli interventi di dissesto idrogeologico
+  x-api-id: it.example.api-interventi-dissesto
   termsOfService: https://example.com/terms-of-service
   contact:
     name: Supporto API
     email: supporto@example.com
 servers:
   - url: https://api.example.com
-    description: Server di produzione per l'API Atti e Interventi di Dissesto
+    description: Server di produzione per l'API Interventi di Dissesto
 tags:
   - name: public
     description: Endpoints pubblici
 security:
   - bearerAuth: []
 paths:
-  /elenco-atti-dissesto:
-    get:
-      summary: Fornisce la lista degli atti con cui l'Ente erogatore ha finanziato interventi di difesa del suolo
-      operationId: elencoAttiDissesto
-      description: Recupera l'elenco degli atti di dissesto per un determinato ente erogatore.
-      tags:
-        - public
-      parameters:
-        - name: id_ente
-          in: query
-          required: true
-          schema:
-            type: string
-            maxLength: 6
-          description: Codice identificativo ente erogatore servizio (regioni = cod. ISTAT; Bolzano = 21; Trento = 22).
-        - name: id_atto_fin
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 40
-          description: Codice/Denominazione sintetica atto di finanziamento.
-        - name: data_agg
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date
-          description: Data ultimo aggiornamento informazioni dell'atto.
-      responses:
-        '200':
-          description: Elenco degli atti di dissesto recuperato con successo.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  atti:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/AttoDissesto'
-        '400':
-          description: Richiesta non valida.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        '401':
-          description: Non autorizzato. Token JWT mancante o non valido.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        '500':
-          description: Errore interno del server.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-  
   /elenco-interventi-dissesto:
     get:
       summary: Fornisce l'elenco degli interventi di difesa del suolo finanziati da un atto di finanziamento
@@ -134,23 +74,11 @@ paths:
                     items:
                       $ref: '#/components/schemas/InterventoDissesto'
         '400':
-          description: Richiesta non valida.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: Non autorizzato. Token JWT mancante o non valido.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/Unauthorized'
         '500':
-          description: Errore interno del server.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/InternalServerError'
   
   /status:
     get:
@@ -158,8 +86,7 @@ paths:
       operationId: status
       tags:
         - public
-      description: |
-        Ritorna lo stato dell'applicazione in formato problem+json.
+      description: Ritorna lo stato dell'applicazione in formato problem+json.
       responses:
         '200':
           description: Il servizio funziona correttamente.
@@ -181,51 +108,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    AttoDissesto:
-      type: object
-      required:
-        - id_ente
-        - id_atto_fin
-        - attoesteso
-        - data_fin
-        - data_agg
-      properties:
-        id_ente:
-          type: string
-          maxLength: 6
-          description: Codice identificativo ente erogatore servizio.
-          example: "123456"
-        id_atto_fin:
-          type: string
-          maxLength: 40
-          description: Codice/Denominazione sintetica atto di finanziamento.
-          example: "FIN123"
-        attoesteso:
-          type: string
-          maxLength: 250
-          description: Denominazione estesa dell'atto di finanziamento.
-          example: "Atto di finanziamento per la difesa del suolo"
-        data_fin:
-          type: string
-          format: date
-          description: Data di approvazione dell'atto di finanziamento.
-          example: "2023-05-20"
-        guri_bur:
-          type: string
-          maxLength: 250
-          description: Riferimenti della Gazzetta o Bollettino ufficiale della eventuale pubblicazione.
-          example: "GURI n. 123 del 2023"
-        link_atto:
-          type: string
-          maxLength: 250
-          description: Indirizzo web da cui è consultabile/scaricabile l'atto di finanziamento.
-          example: "http://example.com/atto-finanziamento"
-        data_agg:
-          type: string
-          format: date
-          description: Data ultimo aggiornamento informazioni dell'atto.
-          example: "2024-06-30"
-
     InterventoDissesto:
       type: object
       required:
@@ -335,7 +217,6 @@ components:
           format: date
           description: Data ultimo aggiornamento informazioni dell'intervento.
           example: "2024-06-30"
-
     Problem:
       type: object
       properties:
@@ -352,3 +233,22 @@ components:
           type: string
           description: Descrizione dettagliata del problema.
           example: "Il parametro 'id_ente' è obbligatorio e deve essere una stringa di massimo 6 caratteri."
+  responses:
+    BadRequest:
+      description: Richiesta non valida.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: Non autorizzato. Token JWT mancante o non valido.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InternalServerError:
+      description: Errore interno del server.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
