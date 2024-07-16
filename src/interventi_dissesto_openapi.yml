@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: API Elenco Interventi di Dissesto
+  title: Consultazione Interventi di Dissesto
   version: 1.0.0
   description: Questa specifica API definisce un template standardizzato per l'esposizione di dati relativi agli interventi di difesa del suolo finanziati da vari enti erogatori regionali. Questo template è destinato all'uso sulla Piattaforma Digitale Nazionale Dati (PDND), permettendo a ISPRA (Istituto Superiore per la Protezione e la Ricerca Ambientale) di recuperare i dati per alimentare il sistema ReNDiS (Repertorio Nazionale degli interventi per la Difesa del Suolo).
-  x-summary: API per la gestione degli interventi di dissesto idrogeologico
+  x-summary: API per la consultazione degli interventi di dissesto idrogeologico
   x-api-id: it.example.api-interventi-dissesto
   termsOfService: https://example.com/terms-of-service
   contact:

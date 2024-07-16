@@ -1,12 +1,24 @@
-# Elenco Atti di Dissesto 📄
+# Documentazione: Consultazione Atti di Dissesto 📄
 
 Per tornare al README introduttivo, clicca [qui](../README.md).
+
+💡 Si consiglia di utilizzare il nome e la descrizione di seguito indicati per l'e-service, in linea con le [_Buone pratiche per la nomenclatura e la descrizione degli e-service_](https://italia.github.io/pdnd-guida-nomenclatura-eservice/).
+
+## Nome dell'e-service
+Consultazione Atti di Dissesto
+
+## Descrizione dell'e-service
+Restituisce la lista degli atti con cui un ente erogatore ha finanziato gli interventi di difesa del suolo.
+
+## Interfaccia OpenAPI
+
+[Qui](../src/atti_dissesto_openapi.yml) è disponibile l'interfaccia OpenAPI dell'e-service.
 
 ## Endpoint 🔗
 
 **GET** `/elenco-atti-dissesto`
 
-Recupera l'elenco degli atti di dissesto per un determinato ente erogatore regionale.
+Restituisce la lista degli atti con cui un ente erogatore ha finanziato gli interventi di difesa del suolo.
 
 ### Parametri Query 🔍
 
@@ -34,3 +46,11 @@ La risposta è un array di oggetti `AttoDissesto`.
   - Descrizione: Indirizzo web da cui è consultabile/scaricabile l'atto di finanziamento
 - `data_agg`: string (formato date)
   - Descrizione: Data ultimo aggiornamento informazioni dell'atto
+
+## Gestione degli Errori ⚠️
+
+L'API utilizza il formato problem+json per comunicare gli errori. In caso di errore, verrà restituito un oggetto con i seguenti campi:
+
+- `status`: Codice di stato HTTP
+- `title`: Breve descrizione del problema
+- `detail`: Descrizione dettagliata del problema
