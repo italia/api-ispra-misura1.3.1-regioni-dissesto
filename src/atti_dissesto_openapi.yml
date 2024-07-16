@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: API Elenco Atti di Dissesto
+  title: Consultazione Atti di Dissesto
   version: 1.0.0
   description: Questa specifica API definisce un template standardizzato per l'esposizione di dati relativi agli atti di difesa del suolo finanziati da vari enti erogatori regionali. Questo template è destinato all'uso sulla Piattaforma Digitale Nazionale Dati (PDND), permettendo a ISPRA (Istituto Superiore per la Protezione e la Ricerca Ambientale) di recuperare i dati per alimentare il sistema ReNDiS (Repertorio Nazionale degli interventi per la Difesa del Suolo).
-  x-summary: API per la gestione degli atti di dissesto idrogeologico
+  x-summary: API per la consultazione degli atti di dissesto idrogeologico
   x-api-id: it.example.api-atti-dissesto
   termsOfService: https://example.com/terms-of-service
   contact:
@@ -20,7 +20,7 @@ security:
 paths:
   /elenco-atti-dissesto:
     get:
-      summary: Fornisce la lista degli atti con cui l'Ente erogatore ha finanziato interventi di difesa del suolo
+      summary: Fornisce la lista degli atti con cui l'ente erogatore ha finanziato interventi di difesa del suolo
       operationId: elencoAttiDissesto
       description: Recupera l'elenco degli atti di dissesto per un determinato ente erogatore.
       tags:

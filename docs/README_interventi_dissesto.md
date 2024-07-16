@@ -1,12 +1,24 @@
-# Elenco Interventi di Dissesto 🏗️
+# Documentazione: Consultazione Interventi di Dissesto 🏗️
 
 Per tornare al README introduttivo, clicca [qui](../README.md).
+
+💡 Si consiglia di utilizzare il nome e la descrizione di seguito indicati per l'e-service, in linea con le [_Buone pratiche per la nomenclatura e la descrizione degli e-service_](https://italia.github.io/pdnd-guida-nomenclatura-eservice/).
+
+## Nome dell'e-service
+Consultazione Interventi di Dissesto
+
+## Descrizione dell'e-service
+Restituisce la lista degli interventi di difesa del suolo finanziati dati un ente erogatore e un atto di finanziamento.
+
+## Interfaccia OpenAPI
+
+[Qui](../src/interventi_dissesto_openapi.yml) è disponibile l'interfaccia OpenAPI dell'e-service.
 
 ## Endpoint 🔗
 
 **GET** `/elenco-interventi-dissesto`
 
-Recupera l'elenco degli interventi di difesa del suolo per un determinato atto di finanziamento.
+Restituisce la lista degli interventi di difesa del suolo finanziati dati un ente erogatore e un atto di finanziamento.
 
 ### Parametri Query 🔍
 
@@ -80,3 +92,11 @@ La risposta è un array di oggetti `InterventoDissesto`.
 I campi `tipo_diss`, `tipo_opere` e `id_passo` fanno riferimento a vocabolari controllati che saranno pubblicati sul National Data Catalog (NDC) italiano, accessibile tramite schema.gov.it. Questi vocabolari controllati garantiscono la standardizzazione e l'interoperabilità dei dati tra le diverse regioni e sistemi.
 
 Gli utenti di questa API dovrebbero fare riferimento ai vocabolari pubblicati su NDC per ottenere l'elenco completo e aggiornato dei codici validi per questi campi. Questo approccio assicura che tutti gli enti utilizzino la stessa terminologia e codifica, facilitando l'aggregazione e l'analisi dei dati a livello nazionale.
+
+## Gestione degli Errori ⚠️
+
+L'API utilizza il formato problem+json per comunicare gli errori. In caso di errore, verrà restituito un oggetto con i seguenti campi:
+
+- `status`: Codice di stato HTTP
+- `title`: Breve descrizione del problema
+- `detail`: Descrizione dettagliata del problema
