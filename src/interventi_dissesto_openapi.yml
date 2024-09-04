@@ -109,6 +109,23 @@ components:
       bearerFormat: JWT
   schemas:
     InterventoDissesto:
+      x-jsonld-context:
+        cat_diss:
+          "@type": "@id"
+          "@context":
+            "@base": "https://w3id.org/italia/env/vocab/soil-protection/instability-categories/"
+        tipo_diss:
+          "@type": "@id"
+          "@context":
+            "@base": "https://w3id.org/italia/env/vocab/soil-protection/instability-types/"
+        tipo_opere:
+          "@type": "@id"
+          "@context":
+            "@base": "https://w3id.org/italia/env/vocab/soil-protection/repair-types/"
+        id_passo:
+          "@type": "@id"
+          "@context":
+            "@base": "https://dati.isprambiente.it/lodview/vocab/soil-protection/implementation-plan-steps/"
       type: object
       required:
         - id_ente
@@ -149,12 +166,12 @@ components:
           type: string
           minLength: 1
           maxLength: 1
-          description: Categoria dissesto (F = Frana, C = Dissesto costiero, A = Idraulico-alluvionale, I = Incendio, V = Valanga, M = Misto, N = Non definito)
+          description: Categoria dissesto secondo il [Vocabolario delle categorie di dissesto idrogeologico](https://w3id.org/italia/env/vocab/soil-protection/instability-categories)
           example: "F"
         tipo_diss:
           type: string
           maxLength: 6
-          description: Codice della tipologia prevalente del dissesto.
+          description: Codice della tipologia prevalente del dissesto secondo il [Vocabolario dei tipi di dissesto idrogeologico](https://w3id.org/italia/env/vocab/soil-protection/instability-types)
           example: "DF-1"
         id_altro:
           type: string
@@ -179,12 +196,12 @@ components:
         tipo_opere:
           type: string
           maxLength: 6
-          description: Codice della tipologia prevalente di opere.
+          description: Codice della tipologia prevalente di opere secondo il [Vocabolario dei tipi di opere di difesa del suolo](https://w3id.org/italia/env/vocab/soil-protection/repair-types).
           example: "SF-1"
         id_passo:
           type: string
           maxLength: 6
-          description: Codice id_passo corrispondente allo stato di attuazione.
+          description: Codice id_passo corrispondente allo stato di attuazione secondo il [Vocabolario dei passi di attuazione degli interventi](https://w3id.org/italia/env/vocab/soil-protection/implementation-plan-steps).
           example: "190"
         lat:
           type: number

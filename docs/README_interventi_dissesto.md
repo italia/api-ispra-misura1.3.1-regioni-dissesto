@@ -45,13 +45,13 @@ La risposta è un array di oggetti `InterventoDissesto`.
 - `imp_fin`: number (double)
   - Descrizione: Importo assegnato all'ente proponente dall'atto di finanziamento
 - `cat_diss`: string (1 carattere)
-  - Descrizione: Categoria dissesto (vedi sezione "Codici e Valori" per i dettagli)
+  - Descrizione: Categoria dissesto secondo il [Vocabolario delle categorie di dissesto idrogeologico](https://w3id.org/italia/env/vocab/soil-protection/instability-categories) (vedi [le istruzioni](#vocabolari-controllati))
 - `tipo_diss`: string (codice)
-  - Descrizione: Codice della tipologia prevalente del dissesto
+  - Descrizione: Codice della tipologia prevalente del dissesto secondo il [Vocabolario dei tipi di dissesto idrogeologico](https://w3id.org/italia/env/vocab/soil-protection/instability-types) (vedi [le istruzioni](#vocabolari-controllati))
 - `tipo_opere`: string (codice)
-  - Descrizione: Codice della tipologia prevalente di opere
+  - Descrizione: Codice della tipologia prevalente di opere secondo il [Vocabolario dei tipi di opere di difesa del suolo](https://w3id.org/italia/env/vocab/soil-protection/repair-types) (vedi [le istruzioni](#vocabolari-controllati))
 - `id_passo`: string (codice)
-  - Descrizione: Codice id_passo corrispondente allo stato di attuazione
+  - Descrizione: Codice id_passo corrispondente allo stato di attuazione secondo il [Vocabolario dei passi di attuazione degli interventi](https://w3id.org/italia/env/vocab/soil-protection/implementation-plan-steps) (vedi [le istruzioni](#vocabolari-controllati))
 - `id_altro`: string (max 200 caratteri)
   - Descrizione: Altro codice o descrizione utilizzati per identificare il singolo intervento nell'atto di finanziamento
 - `id_rendis`: string (max 15 caratteri)
@@ -74,24 +74,12 @@ La risposta è un array di oggetti `InterventoDissesto`.
   - Descrizione: Comune dell'intervento
 - `data_agg`: string (formato date)
   - Descrizione: Data ultimo aggiornamento informazioni dell'intervento
+ 
+## Vocabolari controllati
 
-## Codici e Valori 🏷️
+Quando un campo richiede di inviare un valore contenuto in un vocabolario controllato, resta inteso che verrà inviata soltanto la stringa corrispondente alla parte variabile dell'URI, dando per definito il prefisso.
 
-### cat_diss (Categoria Dissesto)
-
-- `F`: Frana
-- `C`: Dissesto costiero
-- `A`: Idraulico-alluvionale
-- `I`: Incendio
-- `V`: Valanga
-- `M`: Misto
-- `N`: Non definito
-
-### Vocabolari Controllati 📚
-
-I campi `tipo_diss`, `tipo_opere` e `id_passo` fanno riferimento a vocabolari controllati che saranno pubblicati sul National Data Catalog (NDC) italiano, accessibile tramite schema.gov.it. Questi vocabolari controllati garantiscono la standardizzazione e l'interoperabilità dei dati tra le diverse regioni e sistemi.
-
-Gli utenti di questa API dovrebbero fare riferimento ai vocabolari pubblicati su NDC per ottenere l'elenco completo e aggiornato dei codici validi per questi campi. Questo approccio assicura che tutti gli enti utilizzino la stessa terminologia e codifica, facilitando l'aggregazione e l'analisi dei dati a livello nazionale.
+Esempio: per inviare il valore `"https://w3id.org/italia/env/vocab/soil-protection/instability-categories/F"` è sufficiente inviare la stringa `"F"`
 
 ## Gestione degli Errori ⚠️
 
