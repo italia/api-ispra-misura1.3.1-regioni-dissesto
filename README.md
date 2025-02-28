@@ -1,4 +1,4 @@
-# API di ISPRA - Misura 1.3.1 - Atti e Interventi per il Dissesto 🌍
+# Schemi API erogazione e-service per alimentazione ReNDiS - ISPRA 🌍
 
 ## Panoramica 🔎
 
